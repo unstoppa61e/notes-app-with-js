@@ -1,0 +1,7 @@
+{
+  "dependencies": {
+    "enquirer": "^2.3.6",
+    "minimist": "^1.2.5",
+    "sqlite3": "^5.0.2"
+  }
+}
