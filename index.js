@@ -16,26 +16,49 @@ const main = () => {
   if (argv.l) {
     console.log('yes')
     rl.close()
-  }
-  if (argv.r) {
-    const choices = []
+  } else if (argv.r) {
+    const headers = []
     db.serialize(() => {
       db.each("select * from posts", (err, row) => {
-        choices.push(row.body)
+        headers.push(row.body)
       })
       db.close(err => {
         const prompt = new Select({
-          name: 'first_row',
+          name: 'header',
           message: 'Choose a note you want to see:',
-          choices: choices
+          choices: headers.map(content => content.split('/n')[0]),
+          footer() {
+            console.log(headers)
+            // return '\n' + headers[this.index].value
+            // return '\n' + headers[this.index]
+          }
         })
         prompt.run()
           .then(note => console.log(note))
           .catch(console.error);
-        console.log(choices)
+        // console.log(choices)
         rl.close()
       })
     })
+  } else {
+    rl.on('line', (line) => {　//line変数には標準入力から渡された一行のデータが格納されている
+      db.serialize(() => {
+        console.log(line)
+        db.run("insert into posts(body) values(?)", line);
+        db.close(err => {
+          rl.close()
+        })
+      })
+    });
+    // rl.on('line', (line) => {　//line変数には標準入力から渡された一行のデータが格納されている
+    //   db.serialize(() => {
+    //     console.log(line)
+    //     db.run("insert into posts(body) values(?)", line);
+    //     db.close(err => {
+    //       rl.close()
+    //     })
+    //   })
+    // });
   }
 }
 
