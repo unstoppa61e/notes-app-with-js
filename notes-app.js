@@ -9,7 +9,7 @@
     constructor () {
       const sqlite3 = require('sqlite3').verbose()
       this.db = new sqlite3.Database('./notes.db')
-      this.db.run('create table if not exists notes(id INTEGER PRIMARY KEY, content TEXT)')
+      this.db.run('create table if not exists notes(id integer primary key, content text)')
       this.rl = require('readline').createInterface({
         input: process.stdin,
         output: process.stdout
@@ -68,7 +68,7 @@
         })
         prompt.run()
           .then(answer => {
-            this.db.run('DELETE FROM notes WHERE id = ?', answer, err => {
+            this.db.run('delete from notes where id = ?', answer, err => {
               if (err) {
                 return console.error(err.message)
               }
