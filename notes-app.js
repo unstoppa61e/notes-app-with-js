@@ -45,6 +45,10 @@
         if (err) {
           return console.error(err.message)
         }
+        if (!rows.length) {
+          this.rl.close()
+          return
+        }
         const notes = rows.map(row => {
           return { id: row.id, content: row.content }
         })
@@ -78,6 +82,10 @@
       this.db.all('select content from notes', (err, rows) => {
         if (err) {
           return console.error(err.message)
+        }
+        if (!rows.length) {
+          this.rl.close()
+          return
         }
         const contents = rows.map(row => row.content)
         const prompt = new Select({
